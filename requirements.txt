@@ -1,6 +1,5 @@
 Cython==0.20
 Django==1.6
-PAM==0.4.2
 Pillow==2.0.0
 Twisted-Core==13.0.0
 Twisted-Web==13.0.0
