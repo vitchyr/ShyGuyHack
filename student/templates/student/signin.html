@@ -6,80 +6,80 @@
 	function login()
 	{
 		//alert("Welcome!");
-		loginID = document.getElementById('TEXTBOX_ID').value;
 		//alert(document.getElementById('loginToEnroll').innerHTML);
 		//GO to page 2
 		if (document.getElementById('loginToEnroll').innerHTML == "Log In")
 		{
-		//alert("Welcome2!");
+//		alert("Welcome2!");
 			doSomethingWithLoginBox();
 		} else
 		{
-				//alert("Welcome1!");
+//				alert("Welcome1!");
 			doSomethingWithTextBox();
+
 		}
-		//alert("Done!");
+//		alert("Done!");
 	}
 
-	function loginAndUpdate(xmlHttp)
-	{
-		alert(xmlHttp.responseText);
-		var info = xmlHttp.responseText.replace("[", '').replace("]",'').replace(/\"/g,'');
-		if (info == "Student does not exist")
-		{
-			var xmlHttpNew = new XMLHttpRequest();
-			xmlHttpNew.onreadystatechange = function(){
-				if ( xmlHttp.readyState == 4 && xmlHttp.status == 200 )
-				{
-					var response = xmlHttpNew.responseText;
-					if (response = "Created!")
-					{
-						alert("Account Created, Please Refresh Page and login again");
-					}
-					else {
-						alert("Account not created :(");
-					}
-				}					
-			};
-			xmlHttpNew.open("GET", "http://shyguy.herokuapp.com/student" + textBox + "/create", true);
-			xmlHttpNew.send();
-		}
-		else
-		{
-			//alert("info"+info);
-			var list = info.split(",");
-			var txt = '<h2>Your Classes</h2>';
-			for (var i = 0; i < list.length; i++)
-			{
-				txt = txt + '<a href="http://shyguy.herokuapp.com/courses/'+ list[i]+'/" class="fill-div">' + list[i] + '</a><br>'
-			}
-			document.getElementById('link').innerHTML=txt;
-			document.getElementById('link').style.display=('block');
-			
-			document.getElementById('loginToEnroll').innerHTML = "Enroll";
-		}
-	}
-	
 	function doSomethingWithLoginBox()
 	{
 //	alert("LoginBox");
+	  var textBox = document.getElementById('TEXTBOX_ID').value;
 	 // alert("::"+textBox+"::::");
 	  //Send a http request, parse json object, display as "Your Classes" which is clickable
 	  var xmlHttp = new XMLHttpRequest();
 	  xmlHttp.onreadystatechange = function(){
 		if ( xmlHttp.readyState == 4 && xmlHttp.status == 200 )
 		{
-			loginAndUpdate(xmlHttp);
+//			alert(xmlHttp.responseText);
+			var info = xmlHttp.responseText.replace("[", '').replace("]",'').replace(/\"/g,'');
+			/*if (info == "Student does not exist")
+			{
+				var xmlHttpNew = new XMLHttpRequest();
+				xmlHttpNew.onreadystatechange = function(){
+					if ( xmlHttp.readyState == 4 && xmlHttp.status == 200 )
+					{
+						var response = xmlHttpNew.responseText;
+						if (response = "Created!")
+						{
+							alert("Account Created, Please Refresh Page and login again");
+						}
+						else {
+						    alert("Account not created :(");
+						}
+					}					
+				};
+				xmlHttpNew.open("GET", "http://shyguy.herokuapp.com/student" + textBox + "/create", true);
+				xmlHttpNew.send();
+			}
+			else
+			{*/
+				//alert("info"+info);
+				var list = info.split(",");
+				var txt = '<h2>Your Classes</h2>';
+				for (var i = 0; i < list.length; i++)
+				{
+//					txt = txt + '<a href="http://shyguy.herokuapp.com/courses/'+ list[i]+'/" class="fill-div">' + list[i] + '</a><br>';
+                    txt = txt + '<a href="class.html?course='+ list[i]+'/" class="fill-div">' + list[i] + '</a><br>'
+
+				}
+//				alert(txt);
+				document.getElementById('link').innerHTML=txt;
+				document.getElementById('link').style.display=('block');
+				
+				document.getElementById('loginToEnroll').innerHTML = "Enroll";
+			//}
 		}
-	  };
-	  alert(loginID);
+		};
+	  loginID = textBox;
+//	  alert(loginID);
   	  xmlHttp.open("GET", "http://shyguy.herokuapp.com/student/" + loginID, true);
   	  xmlHttp.send();
 	}
 
 	function doSomethingWithTextBox()
 	{
-		alert("TextBox");
+//		alert("TextBox");
 		var textBox = document.getElementById('TEXTBOX_ID').value;
 		var xmlHttpNew = new XMLHttpRequest();
 		xmlHttpNew.onreadystatechange = function(){
@@ -89,14 +89,13 @@
 				if (response = "Enrolled in "+textBox)
 				{
 					alert("Enrolled in course!");
-					doSomethingWithLoginBox();
 				}
 				else {
 					alert("Not enrolled in course :(");
 				}
 			}					
 		};
-		alert("http://shyguy.herokuapp.com/student/" + loginID + "/enroll?course=" + textBox);
+//		alert("http://shyguy.herokuapp.com/student/" + loginID + "/enroll?course=" + textBox);
 		xmlHttpNew.open("GET", "http://shyguy.herokuapp.com/student/" + loginID + "/enroll?course=" + textBox, true);
 		xmlHttpNew.send();
 	}
