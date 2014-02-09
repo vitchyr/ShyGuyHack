@@ -94,7 +94,7 @@
     xmlhttp.onreadystatechange=function() {
       if (xmlhttp.readyState==4 && xmlhttp.status==200) {
         var row = document.getElementById(tag_name);
-        row.remove();
+        if (row != null) row.remove();
       }
     }
     xmlhttp.open("GET","clear?tag="+tag_name,true);
