@@ -41,14 +41,14 @@ def login(request, netid):
 
 def enroll(request, netid):
   try:
-    course_name = request.GOT['course']
+    course_name = request.GET['course']
   except:
     return HttpResponse("Please provide a course to enroll in.")
 
   courses = Course.objects.filter(name=course_name)
   if len(courses) == 0:
     return HttpResponse("No course called " + course_name + " exists")
-  course = ocurses[0]
+  course = courses[0]
 
   students = Student.objects.filter(netid=netid)
   if len(students) == 0:
