@@ -11,7 +11,7 @@ function next(count) {
   };
 }
 
-var request = d3.xhr("courses/get_data/");
+var request = d3.xhr("get_data/");
 
 setInterval(function() {
   request.post({"course" : 1}, function(error, json) {
@@ -20,7 +20,7 @@ setInterval(function() {
     data.push(json.count);
     redraw();
   });
-}, 1500);
+}, 5000);
 
 var w = 20,
     h = 200;
