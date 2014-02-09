@@ -4,17 +4,22 @@ var t = 1297110663, // start time (seconds since epoch)
     v = 70, // start value (subscribers)
     data = d3.range(33).map(next); // starting dataset
 
-function next() {
+function next(count) {
   return {
     time: ++t,
-    value: v = ~~Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
+    value: v = count
   };
 }
 
+var request = d3.xhr("courses/get_data/");
+
 setInterval(function() {
-  data.shift();
-  data.push(next());
-  redraw();
+  request.post({"course" : 1}, function(error, json) {
+    if (error) return console.warn(error);
+    data.shift()
+    data.push(json.count);
+    redraw();
+  });
 }, 1500);
 
 var w = 20,
