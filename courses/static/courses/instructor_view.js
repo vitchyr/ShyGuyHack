@@ -4,20 +4,20 @@ var t = 1297110663, // start time (seconds since epoch)
     v = 70, // start value (subscribers)
     data = d3.range(33).map(next); // starting dataset
 
-function next(count) {
+function next(d) {
   return {
     time: ++t,
-    value: v = count
+    value: v = d.count
   };
 }
 
-var request = d3.xhr("get_data/");
+var request = d3.xhr("get_data", "text/json");
 
 setInterval(function() {
   request.post({"course" : 1}, function(error, json) {
     if (error) return console.warn(error);
     data.shift()
-    data.push(json.count);
+    data.push(next(JSON.parse(json)));
     redraw();
   });
 }, 5000);
