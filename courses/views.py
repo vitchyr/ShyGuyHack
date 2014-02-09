@@ -51,9 +51,7 @@ def tags(request, course_name):
   return HttpResponse(json.dumps(tag_names))
   
 def details(request, course_name):
-  try:
-    c = Course.objects.filter(name=course_name)
-  except:
+  if len(Course.objects.filter(name=course_name)) == 0:
     c = Course(name=course_name,description='No description.')
     c.save()
   context = {}
