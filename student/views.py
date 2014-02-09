@@ -55,6 +55,10 @@ def enroll(request, netid):
     student = Student(netid=netid)
   else:
     student = students[0]
+
+  if course.student_set.filter(pk=student.pk).exists():
+    return HttpResponse("Already enrolled")
+    
   student.courses.add(course) 
   student.save()
   return HttpResponse("Enrolled in " + course.name)

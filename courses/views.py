@@ -63,9 +63,14 @@ def tags(request, course_name):
   return HttpResponse(json.dumps(tag_names))
   
 def details(request, course_name):
-  if len(Course.objects.filter(name=course_name)) == 0:
+  courses = Course.objects.filter(name=course_name)
+  if len(courses) == 0:
     return HttpResponse('Course does not exist.')
-  context = {}
+  course = courses[0]
+
+  tags = Tag.objects.filter(course=course.pk)
+
+  context = {'course': course}
   return render(request, 'courses/instructor_view.html', context)
 
 def get_data(request, course_name):
