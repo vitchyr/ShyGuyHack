@@ -2,7 +2,13 @@ var N_STUDENTS = 100
 
 var t = 1297110663, // start time (seconds since epoch)
     v = 70, // start value (subscribers)
-    data = [next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42})]; // starting dataset
+    data = [],
+    len = 20
+
+for (var i = 0; i < len; i++){
+  data.push(next({count: 42}));
+}
+
 
 function next(d) {
   return {
@@ -14,10 +20,10 @@ function next(d) {
 var request = d3.xhr("get_data", "text/json");
 
 setInterval(function() {
-  request.post({"course" : 1}, function(error, json) {
+  request.get(function(error, json) {
     if (error) return console.warn(error);
     data.shift()
-    data.push(next(JSON.parse(json)));
+    data.push(next(JSON.parse(json.response)));
     redraw();
   });
 }, 5000);
