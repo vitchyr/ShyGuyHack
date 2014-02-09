@@ -5,3 +5,6 @@ from courses.models import Course
 class Student(models.Model):
   netid = models.CharField(max_length=200)
   courses = models.ManyToManyField(Course)
+
+  def __str__(self):
+    return self.netid

@@ -7,16 +7,28 @@ from courses.models import Course, Tag
 
 # Create your views here.
 def index(request):
-  return HttpResponse('test')
+  courses = Course.objects.all()
+  context = {
+    'courses': courses,
+  }
+  return render(request, 'courses/index.html', context)
 
-def create(request):
-  c = Course(name='test course',description='test descript')
+def create(request, course_name):
+  if len(exists) > 0:
+    return HttpResponse('Class already exists')
+    
+  try:
+    des = request.GET['description']
+  except:
+    des = "Class for " + course_name
+  exists = Course.objects.filter(name=course_name)
+  c = Course(name=course_name,description=des)
   c.save()
-  return HttpResponse('Course created with id = ' + str(c.pk))
+  return HttpResponse('Course ' + c.name + ' created.')
 
 # creates or increments a tag
 def increment_tag(c, tag_text):
-  tags = Tag.objects.filter(name=tag_text)
+  tags = Tag.objects.filter(course=c, name=tag_text)
   if len(tags) == 0: # first of the tag
     t = Tag(course=c, name=tag_text, count=1)
   else:
@@ -52,8 +64,7 @@ def tags(request, course_name):
   
 def details(request, course_name):
   if len(Course.objects.filter(name=course_name)) == 0:
-    c = Course(name=course_name,description='No description.')
-    c.save()
+    return HttpResponse('Course does not exist.')
   context = {}
   return render(request, 'courses/instructor_view.html', context)
 

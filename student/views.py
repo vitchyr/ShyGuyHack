@@ -10,10 +10,51 @@ from courses.models import Course
 def index(request):
   return HttpResponse('student page')
 
-def detail(request, netid):
-  student = get_object_or_404(Student, netid=netid)
+def get_course_names(student):
   courses = student.courses.all()
   course_names = []
   for c in courses:
     course_names.append(c.name)
+  return courses
+  
+def detail(request, netid):
+  students = Student.objects.filter(netid=netid)
+  if len(students) == 0:
+    return HttpResponse("Student does not exist")
+  
+  student = students[0]
+  course_names = get_course_names(student)
   return HttpResponse(json.dumps(course_names))
+
+def create(request, netid):
+  s = Student(netid=netid)
+  s.save()
+  return HttpResponse('Created!')
+
+def login(request, netid):
+  students = Student.objects.filter(netid=netid)
+  if len(students) == 0:
+    return HttpResponse("") # current protocol: return empty str if no student
+  
+  course_names = get_course_names(student[0])
+  return HttpResponse(json.dumps(course_names))
+
+def enroll(request, netid):
+  try:
+    course_name = request.GOT['course']
+  except:
+    return HttpResponse("Please provide a course to enroll in.")
+
+  courses = Course.objects.filter(name=course_name)
+  if len(courses) == 0:
+    return HttpResponse("No course called " + course_name + " exists")
+  course = ocurses[0]
+
+  students = Student.objects.filter(netid=netid)
+  if len(students) == 0:
+    student = Student(netid=netid)
+  else:
+    student = students[0]
+  student.courses.add(course) 
+  student.save()
+  return HttpResponse("Enrolled in " + course.name)
