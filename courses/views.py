@@ -36,7 +36,7 @@ def increment_tag(c, tag_text):
     t.count += 1
   t.save()
 
-default_tag = "default"
+default_tag = "General Confusion"
 
 def vote(request, course_name):
   c = get_object_or_404(Course, name=course_name)
@@ -67,10 +67,9 @@ def details(request, course_name):
   if len(courses) == 0:
     return HttpResponse('Course does not exist.')
   course = courses[0]
-
   tags = Tag.objects.filter(course=course.pk)
 
-  context = {'course': course}
+  context = {'course': course, 'tags': tags}
   return render(request, 'courses/instructor_view.html', context)
 
 def get_data(request, course_name):

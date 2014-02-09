@@ -20,8 +20,14 @@
     </style>
   </head>
 	<body>
-    <h1></h1>
+    <h1>{{ course.name }}</h1>
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{% static 'courses/instructor_view.js' %}" charset="utf-8"></script>
+  <h4>Topics that confuse people:</h4>
+  <ul>
+  {% for t in tags %}
+    <li>{{ t.name }}</li>
+  {% endfor %}
+  </ul>
 	</body>
 </html>
