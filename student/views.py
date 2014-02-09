@@ -36,7 +36,7 @@ def login(request, netid):
   if len(students) == 0:
     return HttpResponse("") # current protocol: return empty str if no student
   
-  course_names = get_course_names(student[0])
+  course_names = get_course_names(students[0])
   return HttpResponse(json.dumps(course_names))
 
 def enroll(request, netid):

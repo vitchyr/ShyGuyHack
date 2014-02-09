@@ -14,6 +14,7 @@ def index(request):
   return render(request, 'courses/index.html', context)
 
 def create(request, course_name):
+  exists = Course.objects.filter(name=course_name)
   if len(exists) > 0:
     return HttpResponse('Class already exists')
     
@@ -21,7 +22,6 @@ def create(request, course_name):
     des = request.GET['description']
   except:
     des = "Class for " + course_name
-  exists = Course.objects.filter(name=course_name)
   c = Course(name=course_name,description=des)
   c.save()
   return HttpResponse('Course ' + c.name + ' created.')
