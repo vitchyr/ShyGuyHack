@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
 from courses.models import Course, Tag
@@ -25,6 +25,17 @@ def create(request, course_name):
   c = Course(name=course_name,description=des)
   c.save()
   return HttpResponse('Course ' + c.name + ' created.')
+
+def get_data(request, course_name):
+  c = get_object_or_404(Course, name=course_name)
+  course_tags = Tag.objects.filter(course=c.pk)
+  tag_count = 0
+  for t in course_tags:
+    tag_count += t.count
+  data = {"count": tag_count}
+  output = json.dumps(data)
+  print("get_data called")
+  return HttpResponse(output)
 
 # creates or increments a tag
 def increment_tag(c, tag_text):
@@ -61,7 +72,17 @@ def tags(request, course_name):
   for t in tags:
     tag_names.append(t.name)
   return HttpResponse(json.dumps(tag_names))
-  
+
+# Professor clears a tag
+def clear(request, course_name):
+  try:
+    tag_name = request.GET['tag']
+  except:
+    return HttpResponse("Cannot delete tag.")
+  c = get_object_or_404(Course, name=course_name)
+  Tag.objects.filter(course=c.pk, name=tag_name).delete()
+  return HttpResponse("Tag deleted.")
+
 def details(request, course_name):
   courses = Course.objects.filter(name=course_name)
   if len(courses) == 0:
@@ -71,14 +92,3 @@ def details(request, course_name):
 
   context = {'course': course, 'tags': tags}
   return render(request, 'courses/instructor_view.html', context)
-
-def get_data(request, course_name):
-  c = get_object_or_404(Course, name=course_name)
-  course_tags = Tag.objects.filter(course=c.pk)
-  tag_count = 0
-  for t in course_tags:
-    tag_count += t.count
-  data = {"count": tag_count}
-  output = json.dumps(data)
-  print("get_data called")
-  return HttpResponse(output)
