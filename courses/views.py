@@ -16,8 +16,10 @@ def create(request):
 
 def details(request, course_id):
   c = get_object_or_404(Course, pk=course_id)
-  netid = request.POST['netid']
-  tags = request.POST['tags']
-  t = Tag(course=c, name=netid, count=1)
+  #netid = request.POST['netid']
+  netid="vhp22"
+  pop = 5
+  #tags = request.POST['tags']
+  t = Tag(course=c, name=netid, count=pop)
   t.save()
   return HttpResponse(str(t))
