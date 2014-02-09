@@ -6,7 +6,7 @@ var t = 1297110663, // start time (seconds since epoch)
     len = 20
 
 for (var i = 0; i < len; i++){
-  data.push(next({count: 42}));
+  data.push(next({count: 0}));
 }
 
 
