@@ -2,7 +2,7 @@ var N_STUDENTS = 100
 
 var t = 1297110663, // start time (seconds since epoch)
     v = 70, // start value (subscribers)
-    data = d3.range(33).map(next); // starting dataset
+    data = [next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42}), next({count: 42})]; // starting dataset
 
 function next(d) {
   return {
