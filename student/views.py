@@ -15,7 +15,7 @@ def get_course_names(student):
   course_names = []
   for c in courses:
     course_names.append(c.name)
-  return courses
+  return course_names
   
 def detail(request, netid):
   students = Student.objects.filter(netid=netid)
