@@ -14,8 +14,8 @@ def create(request):
   c.save()
   return HttpResponse('Course created with id = ' + str(c.pk))
 
-def vote(request, course_id):
-  c = get_object_or_404(Course, pk=course_id)
+def vote(request, course_name):
+  c = get_object_or_404(Course, name=course_name)
   #netid = request.POST['netid']
   netid="vhp22"
   pop = 5
@@ -24,18 +24,19 @@ def vote(request, course_id):
   t.save()
   return HttpResponse(str(t))
 
-def details(request, course_id):
+def details(request, course_name):
   context = {}
   return render(request, 'courses/instructor_view.html', context)
 
-def get_data(request, course_id):
-  #course_id = request.POST['course_id']
-  #course_id = 1
+def get_data(request, course_name):
+  #course_name = request.POST['course_name']
+  #course_name = 1
   print("get_data called")
-  course_tags = Tag.objects.filter(course=course_id)
+  c = Course.objects.filter(name=course_name)[0]
+  course_tags = Tag.objects.filter(course=c.pk)
   tag_count = 0
   for t in course_tags:
     tag_count += 1
   data = {'count': tag_count}
   output = json.dumps(data)
-  return HttpResponse(output)
+  return output
