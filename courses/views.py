@@ -97,6 +97,12 @@ def clear(request, course_name):
   Tag.objects.filter(course=c.pk, name=tag_name).delete()
   return HttpResponse("Tag deleted.")
 
+# Student's view of a course
+def student(request, course_name):
+  course = get_object_or_404(Course, name=course_name)
+  context = {'course': course}
+  return render(request, 'courses/student_view.html', context)
+
 def details(request, course_name):
   courses = Course.objects.filter(name=course_name)
   if len(courses) == 0:

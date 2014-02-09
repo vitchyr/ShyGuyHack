@@ -31,6 +31,7 @@ def create(request, netid):
   s.save()
   return HttpResponse('Created!')
 
+# Login for phone
 def login(request, netid):
   students = Student.objects.filter(netid=netid)
   if len(students) == 0:
@@ -38,6 +39,10 @@ def login(request, netid):
   
   course_names = get_course_names(students[0])
   return HttpResponse(json.dumps(course_names))
+
+# Login for web
+def signin(request):
+  return render(request, 'student/signin.html')
 
 def enroll(request, netid):
   try:

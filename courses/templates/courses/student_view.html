@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<script>
+
+function setCookie(cname,cvalue,exdays)
+{
+    var d = new Date();
+    d.setTime(d.getTime()+(exdays*24*60*60*1000));
+    var expires = "expires="+d.toGMTString();
+    document.cookie = cname + "=" + cvalue + expires + ";";
+}
+
+function getCookie(cname)
+{
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++)
+    {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+function addTag()
+{
+    var tag = prompt("Please enter a new tag");
+    if (tag != null)
+    {
+        setCookie(tag,"1",9999);
+        var xmlHttp = new XMLHttpRequest();
+        var courseTitle = document.URL.replace("%20","");
+        courseTitle = courseTitle.substring(document.URL.indexOf("=")+1, document.URL.indexOf("=")+7);
+        xmlHttp.open("GET", "http://shyguy.herokuapp.com/courses/" + courseTitle + "/tag?tag="+tag, true);
+        xmlHttp.send();
+        // send a req to add the tag
+        // disp success message
+//        alert("tag we added is :" + getCookie(tag) + ":");
+        displayTags()
+    }
+
+}
+
+function checkedTag(cb) {
+//    alert("checked :" + cb.value+":"+getCookie(cb.value)+":");
+    if (getCookie(cb.value).length == 0 || getCookie(cb.value).indexOf("0") != -1) {
+        setCookie(cb.value,"1",9999); // should be set to opposite of what it is (1 if 0 or "")
+    } else {
+        setCookie(cb.value,"0",9999);
+    }
+//    alert(cb.value + " " + $.cookie(cb.value));
+    var xmlHttp = new XMLHttpRequest();
+    var courseTitle = document.URL.replace("%20","");
+    courseTitle = courseTitle.substring(document.URL.indexOf("=")+1, document.URL.indexOf("=")+7);
+    xmlHttp.open("GET", "http://shyguy.herokuapp.com/courses/" + courseTitle + "/tag?tag="+cb.value, true);
+    xmlHttp.send();
+}
+
+function displayTags()
+{
+//    alert("display tags");
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function()
+    {
+//        alert(xmlHttp.readyState + "  " + xmlHttp.status);
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200 )
+        {
+            var info = xmlHttp.responseText.split(", ");
+//            alert(info + info.length);
+            var txt = "<form>";
+            for (var i=0; i<info.length; i++)
+            {
+                info[i] = info[i].replace(/\"/g,"");
+                info[i] = info[i].replace("[","");
+                info[i] = info[i].replace("]","");
+//                                          alert(":"+info[i] + ":" + getCookie(info[i])+":");
+                if (getCookie(info[i]).length == 0 || getCookie(info[i]).indexOf("0") != -1) {
+//                                          alert("aaa");
+                    setCookie(info[i],"0",1);
+//                                          alert("aabb " + info[i]);
+                    txt += '<input type="checkbox" name="tag" value="'+info[i]+'" onclick="checkedTag(this);">'+info[i]+'<br>';
+//                                          alert("ha");
+                } else {
+//                                          alert("bbbb " + info[i]);
+                    txt += '<input type="checkbox" name="tag" value="'+info[i]+'" onclick="checkedTag(this);" checked="true">'+info[i]+'<br>';
+//                                          alert("ho");
+                }
+            }
+            txt += "</form>";
+            document.getElementById('tags').innerHTML=txt;
+            document.getElementById('tags').style.display='block';
+        }
+    };
+    //alert(xmlHttp.onreadystatechange);s
+    var courseTitle = document.URL.replace("%20","");
+    courseTitle = courseTitle.substring(document.URL.indexOf("=")+1, document.URL.indexOf("=")+7);
+    xmlHttp.open("GET", "http://shyguy.herokuapp.com/courses/" + courseTitle + "/tags", true);
+    xmlHttp.send();
+}
+
+
+                                          
+</script>
+
+<head>
+<link rel="stylesheet" type="text/css" href="class.css">
+</head>
+
+<body onload="displayTags()">
+<script>
+    var courseTitle = document.URL.replace("%20","");
+    courseTitle = courseTitle.substring(document.URL.indexOf("=")+1, document.URL.indexOf("=")+7);
+    alert(courseTitle);
+    document.write("<h1>" + courseTitle + "</h1>");
+</script>
+
+<div>
+ 
+<button type="button">Do Nothing!</button>
+
+<div id="my-div" onclick="addTag()">
+    <a href="#" class="fill-div">Add Tag</a>
+</div>
+
+<div id="tags" style="display;none;">
+
+</div>
+</body>
+</html>

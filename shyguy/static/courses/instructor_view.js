@@ -26,7 +26,7 @@ setInterval(function() {
     data.push(next(JSON.parse(json.response)));
     redraw();
   });
-}, 5000);
+}, 1000);
 
 var w = 20,
     h = 200;

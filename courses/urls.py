@@ -11,5 +11,6 @@ urlpatterns = patterns('',
   url(r'^(?P<course_name>\w{0,200})/tag$', views.tag, name='tag'),
   url(r'^(?P<course_name>\w{0,200})/tags$', views.tags, name='tags'),
   url(r'^(?P<course_name>\w{0,200})/clear$', views.clear, name='clear'),
+  url(r'^(?P<course_name>\w{0,200})/student$', views.student, name='student'),
   url(r'^(?P<course_name>\w{0,200})/$', views.details, name='details'),
 )
