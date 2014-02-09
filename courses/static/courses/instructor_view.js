@@ -60,7 +60,7 @@ chart.append("line")
 chart.append("g")
     .attr("class", "axis")
     .call(yAxis)
-    .attr("transform", "translate(5,0)");
+    .attr("transform", "translate(30,0)");
     //.attr("stroke", "black");
     //.attr("stroke-width", 2);
 

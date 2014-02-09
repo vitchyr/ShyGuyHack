@@ -34,7 +34,21 @@ def get_data(request, course_name):
     tag_count += t.count
   data = {"count": tag_count}
   output = json.dumps(data)
-  print("get_data called")
+  return HttpResponse(output)
+
+def get_tags(request, course_name):
+  c = get_object_or_404(Course, name=course_name)
+  raw_tags = Tag.objects.filter(course=c.pk)
+  tags = []
+
+  for t in raw_tags:
+    d = {}
+    d['name'] = t.name
+    d['count'] = t.count
+    tags.append(d)
+
+  sorted_tags = sorted(tags, key=lambda k: k['count']) 
+  output = json.dumps(sorted_tags)
   return HttpResponse(output)
 
 # creates or increments a tag

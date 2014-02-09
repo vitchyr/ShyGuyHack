@@ -30,13 +30,12 @@
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{% static 'courses/instructor_view.js' %}" charset="utf-8"></script>
   <div class="scroll">
-  <table>
+  <table id="tagtable">
     <tr>
-      <td>Topic that confuses people</td><td>&nbsp;----&nbsp;</td><td>People Count</td></td>
+      <td>Topic that confuses people</td><td>&nbsp;----&nbsp;</td><td>People Count</td><td></td>
     </tr>
   {% for t in tags %}
     <tr id="{{ t.name }}">
-    <!--td><a href="/courses/{{ course.name}}/{{ t.name}}/clear">{{ t.name }}</a></td><td></td><td>{{t.count}}</td-->
     <td>{{ t.name }}</td><td></td><td>{{t.count}}</td>
 		<td> <a href="javascript:void(0);" onclick="removeTag('{{ t.name }}')";  class="classname">X</a> </td>
     <tr>
@@ -46,7 +45,7 @@
 <!-- Tae's code -->
   <script>
 
-  /*
+  
   setInterval(function() {
     var xmlhttp;
     // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -58,14 +57,29 @@
     }
     xmlhttp.onreadystatechange=function() {
       if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-        tags = JSON.parse(xmlhttp.responseText)
-        alert(tags)
+        var table = document.getElementById("tagtable");
+        var tags = JSON.parse(xmlhttp.responseText);
+        // Update tag table. First delete old data
+        for(var i = table.rows.length - 1; i > 0; i--){
+          table.deleteRow(i);
+        }
+        for(var i = 0; i < tags.length; i++){
+          var row = table.insertRow(1);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          cell1.innerHTML = tags[i]['name'];
+          cell2.innerHTML = "";
+          cell3.innerHTML = tags[i]['count'];
+          cell4.innerHTML = "<a href='javascript:void(0);'>X</a>";
+          cell4.onclick="removeTag('" + tags[i]['name'] + "')";
+        }
       }
     }
     xmlhttp.open("GET","get_tags",true);
     xmlhttp.send();
   }, 1000);
-  */
     
   function removeTag(tag_name){
 
